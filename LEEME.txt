@@ -80,15 +80,3 @@ y el RETO 3 (Explicación didáctica de Variable Global vs Return):
   Demuestra por qué en ingeniería es superior el uso de funciones con `return`
   frente a variables globales `global` (modularidad, aislamiento de efectos
   secundarios y testeabilidad).
-
-
-6. GUÍA RÁPIDA PARA LA SUSTENTACIÓN ORAL
---------------------------------------------------------------------------------
-Si el docente solicita cambios en vivo durante la sustentación:
-- Cambiar la capacidad de la batería: Usa el control numérico en la barra lateral
-  o modifica `"capacidad"` en `datos/entrada.json`.
-- Modificar un umbral de color: En `app.py`, busca la función `updateHour()`
-  en el script JS (`data.battPct > 50` para verde, `>= 20` para amarillo).
-- Probar otra hora o agregar horas: La línea de tiempo y el deslizador son dinámicos
-  y se adaptan automáticamente a N horas sin romperse.
-================================================================================
