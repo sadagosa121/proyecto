@@ -1,0 +1,11 @@
+{
+  "microrred": "Caso de Verificación Oficial",
+  "capacidad": 10.0,
+  "soc_inicial": 5.0,
+  "horas": [
+    [0.0, 2.0],
+    [6.0, 2.0],
+    [8.0, 1.0],
+    [0.0, 12.0]
+  ]
+}

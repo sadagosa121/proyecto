@@ -1,0 +1,94 @@
+================================================================================
+PROYECTO 6: MICRORRED CON BATERÍA
+Fundamentos de Programación - Universidad del Magdalena (Ingeniería Energética)
+================================================================================
+
+1. DESCRIPCIÓN DEL PROYECTO
+--------------------------------------------------------------------------------
+Aplicación interactiva y visual para la simulación del balance energético horario
+en una microrred equipada con generación solar fotovoltaica, banco de baterías,
+demanda eléctrica y conexión a red externa.
+
+La lógica del modelo calcula hora a hora si se carga la batería, se descarga,
+se compra energía a la red o se vierte excedente, manteniendo el estado de carga
+(SOC) y evaluando la autosuficiencia energética (% sin red).
+
+
+2. ESTRUCTURA DE ARCHIVOS
+--------------------------------------------------------------------------------
+├── logica.py               <- Módulo con la lógica matemática y algoritmos (solo lo visto en clase)
+├── app.py                  <- Interfaz gráfica interactiva construida con Streamlit
+├── datos/
+│   ├── caso_verificacion.json <- Caso oficial de 4 horas para comprobación estricta
+│   ├── entrada.json        <- Perfil diario completo de 24 horas (Microrred Rural 1)
+│   └── salida.json         <- Resultados generados automáticamente tras cada simulación
+├── bitacora.md             <- Registro de prompts, comandos y proceso iterativo con el agente
+├── test_verificacion.py    <- Script de prueba automática del caso de verificación
+└── LEEME.txt               <- Instrucciones de ejecución y documentación del reto
+
+
+3. CÓMO EJECUTAR LA APLICACIÓN
+--------------------------------------------------------------------------------
+Requisitos: Python 3.10+ y Streamlit instalados.
+
+Paso 1: Abrir la terminal de comandos (PowerShell o CMD) en la carpeta del proyecto:
+    cd c:\Users\samue\Downloads\Proyecto
+
+Paso 2 (Opcional - entorno virtual):
+    .\.venv\Scripts\activate
+
+Paso 3: Ejecutar la aplicación con Streamlit:
+    streamlit run app.py
+
+La aplicación se abrirá automáticamente en tu navegador web en:
+    http://localhost:8501
+
+
+4. COMPROBACIÓN DEL CASO DE VERIFICACIÓN
+--------------------------------------------------------------------------------
+Para verificar los resultados esperados de la rúbrica (Sección 5):
+1. En la barra lateral izquierda de la aplicación, selecciona en el menú desplegable:
+   "⭐ Caso de Verificación Oficial (4h)"
+2. O ejecuta en la consola el script de prueba unitaria:
+   python test_verificacion.py
+
+Resultados obtenidos (100% coincidentes con la pauta):
+- Carga de batería al final de cada hora: 3 · 7 · 10 · 0 kWh
+- Hora 3: Sobran 7 kWh, caben 3 en batería y 4 se vierten.
+- Hora 4: Faltan 12 kWh, la batería entrega 10 y 2 se compran a la red.
+- Totales: Compra a red = 2.0 kWh | Vertido = 4.0 kWh | Carga final batería = 0.0 kWh.
+- Cobertura sin red: 88.24%.
+
+
+5. RETO FUNCIONAL SELECCIONADO (SECCIÓN 4 DEL PROYECTO)
+--------------------------------------------------------------------------------
+Se implementó el RETO 2: "Buscar la capacidad mínima de batería para no comprar
+a la red en el día", complementado con el RETO 1 (Eficiencia de carga/descarga)
+y el RETO 3 (Explicación didáctica de Variable Global vs Return):
+
+- Reto 2 (Capacidad Mínima):
+  Función `buscar_capacidad_minima_sin_red(datos)` en `logica.py`.
+  Evalúa de manera iterativa el dimensionamiento mínimo del acumulador necesario
+  para alcanzar una autosuficiencia del 100% (cero compra a la red). Si la generación
+  total del día es menor a la demanda total, avisa que físicamente no es autosuficiente.
+
+- Reto 1 (Eficiencia):
+  Función `simular_con_eficiencia(datos, eficiencia)` que incorpora las pérdidas
+  reales en los ciclos electroquímicos de carga y descarga.
+
+- Reto 3 (Variable Global vs Return):
+  Demuestra por qué en ingeniería es superior el uso de funciones con `return`
+  frente a variables globales `global` (modularidad, aislamiento de efectos
+  secundarios y testeabilidad).
+
+
+6. GUÍA RÁPIDA PARA LA SUSTENTACIÓN ORAL
+--------------------------------------------------------------------------------
+Si el docente solicita cambios en vivo durante la sustentación:
+- Cambiar la capacidad de la batería: Usa el control numérico en la barra lateral
+  o modifica `"capacidad"` en `datos/entrada.json`.
+- Modificar un umbral de color: En `app.py`, busca la función `updateHour()`
+  en el script JS (`data.battPct > 50` para verde, `>= 20` para amarillo).
+- Probar otra hora o agregar horas: La línea de tiempo y el deslizador son dinámicos
+  y se adaptan automáticamente a N horas sin romperse.
+================================================================================
